@@ -1,6 +1,7 @@
 <?php
 
 use App\Billing\FakePaymentGateway;
+use App\Billing\PaymentGateway;
 use App\Concert;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -14,6 +15,8 @@ class PurchaseTicketsTest extends TestCase
     {
         $paymentGateway = new FakePaymentGateway;
 
+        $this->app->instance(PaymentGateway::class, $paymentGateway);
+
         $concert = factory(Concert::class)->create(['ticket_price' => 3250]);
 
         $this->json('POST', "/concerts/{$concert->id}/orders", [
@@ -24,6 +27,10 @@ class PurchaseTicketsTest extends TestCase
 
             'payment_token' => $paymentGateway->getValidTestToken(),
         ]);
+
+//        $response = $this->get('/concerts/'.$concert->id.'/orders');
+//
+//        $response->assertStatus(201);
 
         $this->assertEquals(9750, $paymentGateway->totalCharges());
 
