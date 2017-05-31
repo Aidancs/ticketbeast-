@@ -9,8 +9,7 @@ class ConcertsController extends Controller
 {
     public function show($id)
     {
-        if (Concert::published()->find($id))
-        {
+        if (Concert::published()->find($id)) {
             $concert = Concert::published()->find($id);
 
             return view('concerts.show', ['concert' => $concert]);
