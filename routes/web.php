@@ -14,3 +14,5 @@
 Route::get('/concerts/{id}')
     ->name('concerts.index')
     ->uses('ConcertsController@show');
+
+Route::post('/concerts/{id}/orders', 'ConcertOrdersController@store');
